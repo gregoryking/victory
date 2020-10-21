@@ -17,6 +17,7 @@ export interface VictoryHistogramProps
     VictoryMultiLabelableProps {
   binSpacing?: number;
   bins?: number | number[] | Date[];
+  sumBins?: boolean;
   cornerRadius?:
     | NumberOrCallback
     | {

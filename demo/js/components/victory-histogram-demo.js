@@ -17,9 +17,18 @@ const randomDate = (start, end) => {
 
 const getData = ({ length = 100, min = 0, max = 10, dates = false } = {}) => {
   const randomDataFunc = dates ? randomDate : random;
-  return range(length).map(() => ({
-    x: randomDataFunc(min, max)
-  }));
+  if (random()>0.5) {
+    return range(length).map(() => ({
+      x: randomDataFunc(min, max)
+    }));
+  }
+  else {
+    return range(length).map(() => ({
+      x: randomDataFunc(min, max),
+      y: random(1,100)
+    }));    
+  }
+
 };
 
 export default class App extends React.Component {
@@ -512,7 +521,6 @@ export default class App extends React.Component {
             animate={{ duration: 1000 }}
           />
         </VictoryChart>
-
         <VictoryChart style={{ parent: parentStyle }}>
           <VictoryHistogram
             style={{
@@ -520,6 +528,7 @@ export default class App extends React.Component {
             }}
             data={this.state.dateDynamicBinsBasedOnData.data}
             bins={this.state.dateDynamicBinsBasedOnData.bins}
+            sumBins={true}
             animate={{ duration: 1000 }}
           />
         </VictoryChart>
@@ -528,9 +537,11 @@ export default class App extends React.Component {
           <VictoryHistogram
             style={{
               data: { stroke: "#833B61", strokeWidth: 3, fill: "#F67E7D" }
+
             }}
             data={this.state.dateDynamicBins.data}
             bins={this.state.dateDynamicBins.bins}
+            sumBins={true}
             animate={{ duration: 500 }}
           />
         </VictoryChart>

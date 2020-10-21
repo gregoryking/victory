@@ -56,6 +56,7 @@ export class VictoryHistogram extends React.Component {
       ),
       CustomPropTypes.nonNegative
     ]),
+    sumBins: PropTypes.bool,
     cornerRadius: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.func,

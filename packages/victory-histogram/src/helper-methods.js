@@ -67,7 +67,7 @@ const getBinningFunc = ({ data, x, bins, dataOrBinsContainsDates }) => {
   return bin;
 };
 
-export const getFormattedData = cacheLastValue(({ data = [], x, bins }) => {
+export const getFormattedData = cacheLastValue(({ data = [], x, bins, sumBins }) => {
   if ((!data || !data.length) && !Array.isArray(bins)) {
     return [];
   }
@@ -90,7 +90,7 @@ export const getFormattedData = cacheLastValue(({ data = [], x, bins }) => {
       x0,
       x1,
       x: dataOrBinsContainsDates ? new Date((x0.getTime() + x1.getTime()) / 2) : (x0 + x1) / 2,
-      y: bin.length,
+      y: sumBins && bin.length>0 && bin.every(e => e.y) ? bin.map(bin => bin.y).reduce((acc, curr) => acc+curr) : bin.length,
       binnedData: [...bin]
     };
   });
@@ -99,10 +99,10 @@ export const getFormattedData = cacheLastValue(({ data = [], x, bins }) => {
 });
 
 const getData = (props) => {
-  const { bins, data, x } = props;
+  const { bins, data, x, sumBins } = props;
   const dataIsPreformatted = data.some(({ _y }) => !isNil(_y));
 
-  const formattedData = dataIsPreformatted ? data : getFormattedData({ data, x, bins });
+  const formattedData = dataIsPreformatted ? data : getFormattedData({ data, x, bins, sumBins});
   return Data.getData({ ...props, data: formattedData, x: "x" });
 };
 
@@ -159,6 +159,7 @@ const getBaseProps = (props, fallbackProps) => {
 
   const {
     binSpacing,
+    sumBins,
     cornerRadius,
     data,
     domain,
